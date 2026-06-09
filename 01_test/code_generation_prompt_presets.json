@@ -1,0 +1,48 @@
+{
+  "판매데이터 분석 Python GUI 프로그램": {
+    "persona": "전문 개발자",
+    "project_goal": "첨부한 엑셀 파일을 기반으로 상품 판매데이터 분석 Python GUI 프로그램 제작",
+    "tech_stack": "Python\nTkinter\ntksheet\nopenpyxl\ntkcalendar",
+    "inputs": "검색기간\n최근일주일 버튼\n최근한달 버튼\n최근 3개월버튼\n최근6개월버튼",
+    "outputs": "1.검색기간의 상품코드별  일자 판매수량  첫열에는 합계출력 합계기준으로 정렬\n2. 검색기간의  상품코드별  쇼핑몰 판매수량  첫열에는 합계출력 합계기준으로 정렬\n3. 년도별  쇼핑몰별 판매수량\n결과를 tksheet 표에 출력",
+    "features": "쇼핑몰 필터기능\n입력초기화 기능\nExcel 저장 기능",
+    "ui_layout": "창 크기 최대화\n최소창 크기 1024x800\n상단 검색기간과 입력필드\n중앙 결과표\n하단 버튼 배치",
+    "output_lang": "한국어",
+    "comments_lang": "한국어",
+    "code_block": "하나의 완전한 코드 블록",
+    "file_format": "단일 파일",
+    "include_examples": true,
+    "include_tests": false,
+    "strict_mode": true,
+    "extras": {
+      "detailed_comments": true,
+      "intuitive_names": true,
+      "error_handling": true,
+      "full_executable": true,
+      "modularization": true
+    }
+  },
+  "웹(HTML/CSS/JS) 계산기": {
+    "persona": "프론트엔드 개발자",
+    "project_goal": "상품 가격 자동 계산 웹페이지 제작",
+    "tech_stack": "HTML\nCSS\nJavaScript",
+    "inputs": "단가, 수량, 수수료율",
+    "outputs": "총액, 이익금, 이익률",
+    "features": "입력 즉시 계산\n반응형 레이아웃\n접근성 고려(레이블/키보드)",
+    "ui_layout": "상단 입력, 중단 결과, 하단 저장/복사 버튼",
+    "extras": {
+      "detailed_comments": true,
+      "intuitive_names": true,
+      "error_handling": true,
+      "full_executable": true,
+      "modularization": false
+    },
+    "output_lang": "한국어",
+    "comments_lang": "한국어",
+    "code_block": "하나의 완전한 코드 블록",
+    "file_format": "단일 파일",
+    "include_examples": false,
+    "include_tests": false,
+    "strict_mode": true
+  }
+}
