@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>판매 데이터 인사이트 대시보드</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Chart.js 라이브러리 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <!-- 메인 스타일시트 -->
+    <link rel="stylesheet" href="dashboard.css" />
+  </head>
+  <body>
+    <!-- ========================================
+         헤더 영역
+         ======================================== -->
+    <header class="header">
+      <div class="header-content">
+        <h1 class="header-title">
+          <span class="icon">📊</span> 판매 데이터 인사이트 대시보드
+        </h1>
+        <div class="header-actions">
+          <!-- 다크 모드 토글 -->
+          <!-- <button class="btn-icon" id="btnDarkMode" title="다크 모드">
+                    <span class="icon">🌙</span>
+                </button> -->
+          <!-- 데이터 상태 표시 -->
+          <div class="data-status" id="dataStatus">
+            <span class="status-indicator"></span>
+            <span class="status-text">로딩 중...</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="main-container">
+      <!-- ========================================
+             사이드바 - 필터 컨트롤
+             ======================================== -->
+      <aside class="sidebar">
+        <div class="sidebar-content">
+          <!-- 필터 섹션 -->
+          <section class="filter-section">
+            <h2 class="section-title">📅 검색 기간</h2>
+
+            <!-- 날짜 입력 -->
+            <div class="date-inputs">
+              <div class="input-group">
+                <label for="startDate">시작일</label>
+                <input
+                  type="text"
+                  id="startDate"
+                  class="input-date"
+                  placeholder="YYYY/MM/DD"
+                />
+              </div>
+              <div class="input-group">
+                <label for="endDate">종료일</label>
+                <input
+                  type="text"
+                  id="endDate"
+                  class="input-date"
+                  placeholder="YYYY/MM/DD"
+                />
+              </div>
+            </div>
+
+            <!-- 빠른 기간 선택 버튼 -->
+            <div class="quick-period">
+              <button class="btn-period" data-days="7">1주</button>
+              <button class="btn-period" data-days="14">2주</button>
+              <button class="btn-period" data-days="30">1개월</button>
+              <button class="btn-period" data-days="90">3개월</button>
+              <button class="btn-period" data-days="180">6개월</button>
+            </div>
+          </section>
+
+          <!-- 쇼핑몰 필터 -->
+          <section class="filter-section">
+            <h2 class="section-title">🏪 쇼핑몰 필터</h2>
+            <div class="mall-filter">
+              <div class="mall-actions">
+                <button class="btn-small" id="btnSelectAll">전체 선택</button>
+                <button class="btn-small" id="btnDeselectAll">선택 해제</button>
+              </div>
+              <div class="mall-list" id="mallList">
+                <!-- JavaScript로 동적 생성 -->
+              </div>
+            </div>
+          </section>
+
+          <!-- 페이지 설정 -->
+          <section class="filter-section">
+            <h2 class="section-title">📄 페이지 설정</h2>
+            <div class="input-group">
+              <label for="perPage">페이지당 행 수</label>
+              <select id="perPage" class="input-select">
+                <option value="10">10행</option>
+                <option value="20" selected>20행</option>
+                <option value="50">50행</option>
+                <option value="100">100행</option>
+                <option value="0">전체</option>
+              </select>
+            </div>
+          </section>
+
+          <!-- 분석 실행 버튼 -->
+          <button class="btn-primary btn-analyze" id="btnAnalyze">
+            <span class="icon">▶</span> 분석 실행
+          </button>
+        </div>
+      </aside>
+
+      <!-- ========================================
+             메인 콘텐츠 영역
+             ======================================== -->
+      <main class="content">
+        <!-- 요약 카드 섹션 -->
+        <section class="summary-section" id="summarySection">
+          <div class="summary-cards">
+            <!-- JavaScript로 동적 생성 -->
+          </div>
+        </section>
+
+        <!-- 탭 네비게이션 -->
+        <div class="tabs">
+          <button class="tab-button active" data-tab="overview">개요</button>
+          <button class="tab-button" data-tab="product-daily">
+            상품별 분석
+          </button>
+          <button class="tab-button" data-tab="product-mall">
+            쇼핑몰별 분석
+          </button>
+          <button class="tab-button" data-tab="daily-mall">일자별 추이</button>
+          <button class="tab-button" data-tab="yearly-mall">연도별 추이</button>
+          <button class="tab-button" data-tab="prediction">판매 예측 ⭐</button>
+        </div>
+
+        <!-- 탭 콘텐츠 -->
+        <div class="tab-contents">
+          <!-- 개요 탭 -->
+          <div class="tab-pane active" id="tab-overview">
+            <div class="overview-grid">
+              <!-- 일자별 추이 차트 -->
+              <div class="chart-card">
+                <h3 class="card-title">일자별 판매 추이</h3>
+                <div class="chart-container">
+                  <canvas id="chartDailyTrend"></canvas>
+                </div>
+              </div>
+
+              <!-- 쇼핑몰별 비교 차트 -->
+              <div class="chart-card">
+                <h3 class="card-title">쇼핑몰별 판매 비교</h3>
+                <div class="chart-container">
+                  <canvas id="chartMallComparison"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 상품별 일자 분석 탭 -->
+          <div class="tab-pane" id="tab-product-daily">
+            <div class="table-card">
+              <div class="table-header">
+                <h3 class="card-title">상품별 일자 분석</h3>
+                <div class="table-actions">
+                  <div class="pagination" id="pagination-product-daily"></div>
+                </div>
+              </div>
+              <div class="table-container">
+                <table class="data-table" id="table-product-daily">
+                  <!-- JavaScript로 동적 생성 -->
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- 상품별 쇼핑몰 분석 탭 -->
+          <div class="tab-pane" id="tab-product-mall">
+            <div class="table-card">
+              <div class="table-header">
+                <h3 class="card-title">상품별 쇼핑몰 분석</h3>
+                <div class="table-actions">
+                  <div class="pagination" id="pagination-product-mall"></div>
+                </div>
+              </div>
+              <div class="table-container">
+                <table class="data-table" id="table-product-mall">
+                  <!-- JavaScript로 동적 생성 -->
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- 일자별 쇼핑몰 분석 탭 -->
+          <div class="tab-pane" id="tab-daily-mall">
+            <div class="table-card">
+              <div class="table-header">
+                <h3 class="card-title">일자별 쇼핑몰 분석</h3>
+                <div class="table-actions">
+                  <div class="pagination" id="pagination-daily-mall"></div>
+                </div>
+              </div>
+              <div class="table-container">
+                <table class="data-table" id="table-daily-mall">
+                  <!-- JavaScript로 동적 생성 -->
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- 연도별 쇼핑몰 분석 탭 -->
+          <div class="tab-pane" id="tab-yearly-mall">
+            <div class="table-card">
+              <div class="table-header">
+                <h3 class="card-title">연도별 쇼핑몰 분석</h3>
+                <div class="table-actions">
+                  <div class="pagination" id="pagination-yearly-mall"></div>
+                </div>
+              </div>
+              <div class="table-container">
+                <table class="data-table" id="table-yearly-mall">
+                  <!-- JavaScript로 동적 생성 -->
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- 판매 예측 탭 -->
+          <div class="tab-pane" id="tab-prediction">
+            <div class="prediction-section">
+              <!-- 예측 실행 버튼 -->
+              <div class="prediction-header">
+                <h3 class="card-title">향후 2주 판매 예측</h3>
+                <button class="btn-primary" id="btnPredict">
+                  <span class="icon">🔮</span> 예측 실행
+                </button>
+              </div>
+
+              <!-- 예측 결과 영역 -->
+              <div class="prediction-results" id="predictionResults">
+                <!-- JavaScript로 동적 생성 -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 하단 액션 바 -->
+        <div class="action-bar">
+          <div class="action-left">
+            <span class="status-message" id="statusMessage">준비됨</span>
+          </div>
+          <div class="action-right">
+            <button class="btn-secondary" id="btnReset">
+              <span class="icon">🔄</span> 초기화
+            </button>
+            <button class="btn-primary" id="btnExport">
+              <span class="icon">💾</span> Excel 저장
+            </button>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- 로딩 오버레이 -->
+    <div class="loading-overlay" id="loadingOverlay">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">처리 중...</div>
+    </div>
+
+    <!-- 메인 JavaScript -->
+    <script src="dashboard.js"></script>
+  </body>
+</html>
